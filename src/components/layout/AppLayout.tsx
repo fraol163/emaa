@@ -103,7 +103,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
             </div>
             <div className="flex items-center gap-1.5">
               <span className="font-serif text-sm font-semibold text-primary leading-none">
-                My Home
+                Ende Bete
               </span>
               <span className="text-sm text-muted-foreground leading-none">|</span>
               <span className="font-serif text-sm font-semibold text-primary leading-none">
