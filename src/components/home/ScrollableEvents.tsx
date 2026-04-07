@@ -1,15 +1,18 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ChevronRight } from 'lucide-react';
+import { ChevronRight, MapPin, Clock, X } from 'lucide-react';
 
 interface Event {
   id: string;
   title: string;
   time: string;
   description: string;
+  detail: string;
+  location: string;
+  highlights: string[];
   color: string;
   image: string;
   link: string;
@@ -21,6 +24,9 @@ const mockEvents: Event[] = [
     title: 'Buna Ceremony',
     time: '3:00 PM',
     description: 'Join us for traditional coffee',
+    detail: 'Experience the authentic Ethiopian coffee ceremony — a centuries-old ritual of roasting, grinding, and brewing coffee by hand. Served with popcorn and incense, this is more than coffee; it\'s a cultural journey.',
+    location: 'Cultural Center, Main Hall',
+    highlights: ['Hand-roasted coffee beans', 'Traditional incense ceremony', 'Served with popcorn & kolo', 'Live cultural narration'],
     color: 'bg-amber-100',
     image: '/buna-ceremony.jpg',
     link: '/little-ethiopia',
@@ -30,6 +36,9 @@ const mockEvents: Event[] = [
     title: 'Dinner Service',
     time: '6:30 PM',
     description: 'Family-style dining',
+    detail: 'Gather around for a communal Ethiopian dining experience. Share injera with a variety of traditional stews — tibs, doro wat, misir, and more — served on a single platter in true Ethiopian fashion.',
+    location: 'Gebeta Restaurant, Terrace',
+    highlights: ['Injera & shared platters', 'Live cooking stations', 'Vegetarian & vegan options', 'Lake-view terrace seating'],
     color: 'bg-orange-100',
     image: '/dining-hall.jpg',
     link: '/gebeta',
@@ -39,6 +48,9 @@ const mockEvents: Event[] = [
     title: 'Evening Music',
     time: '8:00 PM',
     description: 'Traditional performances',
+    detail: 'An evening of Ethiopian music and dance — from the mesmerizing shoulder movements of eskista to live masinko and krar performances. Feel the rhythm of centuries-old traditions under the stars.',
+    location: 'Amphitheater, Garden Level',
+    highlights: ['Live eskista dance', 'Traditional instruments', 'Audience participation', 'Under the stars setting'],
     color: 'bg-rose-100',
     image: '/culture-hero.jpg',
     link: '/events',
@@ -48,6 +60,9 @@ const mockEvents: Event[] = [
     title: 'Spa Session',
     time: '2:00 PM',
     description: 'Relaxation & wellness',
+    detail: 'Rejuvenate with Ethiopian-inspired wellness treatments. From coffee scrubs using local beans to eucalyptus steam therapy — our spa blends ancient remedies with modern relaxation techniques.',
+    location: 'Serenity Spa, Level 2',
+    highlights: ['Coffee body scrub', 'Eucalyptus steam room', 'Hot stone therapy', 'Meditation garden access'],
     color: 'bg-green-100',
     image: '/spa-wellness.jpg',
     link: '/comfort',
@@ -55,6 +70,12 @@ const mockEvents: Event[] = [
 ];
 
 export default function ScrollableEvents() {
+  const [expandedId, setExpandedId] = useState<string | null>(null);
+
+  const toggleExpand = (id: string) => {
+    setExpandedId(expandedId === id ? null : id);
+  };
+
   return (
     <section className="space-y-4 px-4 md:px-6 py-8">
       <div className="flex items-center justify-between">
@@ -88,10 +109,68 @@ export default function ScrollableEvents() {
                   </span>
                 </div>
                 <p className="text-sm text-foreground/70">{event.description}</p>
-                <Link href={event.link} className="block w-full mt-2 bg-white/80 hover:bg-white text-primary font-semibold py-2 rounded-lg text-center transition-smooth">
-                  Learn More
-                </Link>
+                <button
+                  onClick={() => toggleExpand(event.id)}
+                  className="block w-full mt-2 bg-white/80 hover:bg-white text-primary font-semibold py-2 rounded-lg text-center transition-smooth"
+                >
+                  {expandedId === event.id ? 'Show Less' : 'Learn More'}
+                </button>
               </div>
+
+              {/* Inline Detail Card */}
+              {expandedId === event.id && (
+                <div className="px-4 pb-4 space-y-3 animate-in slide-in-from-top-2 duration-200">
+                  <div className="bg-white/90 rounded-xl p-4 space-y-3">
+                    {/* Close button */}
+                    <div className="flex items-center justify-between">
+                      <h4 className="font-serif font-bold text-primary">{event.title}</h4>
+                      <button
+                        onClick={() => setExpandedId(null)}
+                        className="p-1 rounded-full hover:bg-black/5 transition-smooth"
+                        aria-label="Close details"
+                      >
+                        <X className="w-4 h-4 text-foreground/60" />
+                      </button>
+                    </div>
+
+                    {/* Detail text */}
+                    <p className="text-sm text-foreground/80">{event.detail}</p>
+
+                    {/* Location & Time */}
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-2 text-xs text-foreground/60">
+                        <MapPin className="w-3 h-3" />
+                        <span>{event.location}</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-xs text-foreground/60">
+                        <Clock className="w-3 h-3" />
+                        <span>{event.time}</span>
+                      </div>
+                    </div>
+
+                    {/* Highlights */}
+                    <div className="space-y-1">
+                      <p className="text-xs font-semibold text-primary">Highlights</p>
+                      <ul className="space-y-1">
+                        {event.highlights.map((h, i) => (
+                          <li key={i} className="text-xs text-foreground/70 flex items-center gap-1.5">
+                            <span className="w-1 h-1 rounded-full bg-primary/40 flex-shrink-0" />
+                            {h}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    {/* CTA */}
+                    <Link
+                      href={event.link}
+                      className="block w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold py-2 rounded-lg text-center text-sm transition-smooth"
+                    >
+                      View Full Details
+                    </Link>
+                  </div>
+                </div>
+              )}
             </div>
           ))}
 
