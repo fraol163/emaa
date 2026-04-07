@@ -13,7 +13,7 @@ export default function QuickStats() {
 
   useEffect(() => {
     fetch('/api/weather')
-      .then(r => r.json())
+      .then(r => { if (!r.ok) return null; return r.json(); })
       .then(data => setWeather(data))
       .catch(() => {});
   }, []);
@@ -44,7 +44,7 @@ export default function QuickStats() {
     <div className="grid grid-cols-2 gap-4">
       {/* Weather Card */}
       <div className="glass p-4 rounded-2xl flex items-center gap-4 shadow-warm-md">
-        <div className="text-3xl">{weather ? weatherEmoji(weather.condition) : '🌤️'}</div>
+        <div className="text-3xl">{weather?.condition ? weatherEmoji(weather.condition) : '🌤️'}</div>
         <div>
           <div className="text-xs text-muted-foreground">Now</div>
           <div className="text-sm font-semibold text-foreground">
