@@ -14,7 +14,11 @@ export default function QuickStats() {
   useEffect(() => {
     fetch("/api/weather")
       .then((r) => r.json())
-      .then((data) => setWeather(data))
+      .then((data) => {
+        if (data && typeof data.temp === 'number' && typeof data.condition === 'string') {
+          setWeather(data);
+        }
+      })
       .catch(() => {});
   }, []);
 

@@ -87,7 +87,9 @@ export default function HomeDashboard() {
           </Link>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-            {mockRoomStatus.map((status, idx) => (
+            {mockRoomStatus
+              .filter((status) => !status.task.toLowerCase().includes('temperature'))
+              .map((status, idx) => (
               <RoomProgressCard key={idx} status={status} />
             ))}
           </div>
