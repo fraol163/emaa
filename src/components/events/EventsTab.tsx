@@ -83,42 +83,42 @@ interface AIRecommendation {
 const celebrationPackages: CelebrationPackage[] = [
   {
     id: 'pkg1', title: 'Birthday Celebration',
-    image: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/photo_1_2026-04-05_21-36-42-8TiIhuWppsEFSyDKkcYx90LGo6oww9.jpg',
+    image: 'https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=800&q=80',
     description: 'Make your special day unforgettable with our birthday package. Includes decoration, cake, traditional coffee ceremony, and a private dining experience.',
     priceRange: '$150 - $500', guests: '10-50 guests',
     includes: ['Custom decoration', 'Birthday cake', 'Coffee ceremony', 'Private dining', 'Live music option'],
   },
   {
     id: 'pkg2', title: 'Anniversary Dinner',
-    image: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/photo_2_2026-04-05_21-36-42-85R2j1DVTptAuwb9CrsCXCy6ewZamE.jpg',
+    image: 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=800&q=80',
     description: 'Celebrate your love story with an intimate anniversary dinner featuring traditional Ethiopian cuisine, romantic ambiance, and personalized service.',
     priceRange: '$200 - $400', guests: '2-20 guests',
     includes: ['Romantic setup', 'Multi-course dinner', 'Champagne toast', 'Live traditional music', 'Photo session'],
   },
   {
     id: 'pkg3', title: 'Wedding Reception',
-    image: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/photo_3_2026-04-05_21-36-42-6275S8upcViWadpo9NbLRvhCQpLsjr.jpg',
+    image: 'https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=800&q=80',
     description: 'Host your dream wedding reception at Kuriftu African Village. Our team will create a magical celebration blending Ethiopian traditions with your vision.',
     priceRange: '$2,000 - $10,000', guests: '50-300 guests',
     includes: ['Full venue decoration', 'Catering', 'Traditional ceremony', 'Entertainment', 'Coordination team'],
   },
   {
     id: 'pkg4', title: 'Family Reunion',
-    image: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/photo_4_2026-04-05_21-36-42-7tAKyJhcvcVQT3yH1MnXMNooKNdvkC.jpg',
+    image: 'https://images.unsplash.com/photo-1529543544277-750e2e4b6c68?w=800&q=80',
     description: 'Bring your family together for a heartwarming reunion. Enjoy shared meals, games, and create lasting memories in our beautiful grounds.',
     priceRange: '$300 - $1,500', guests: '20-100 guests',
     includes: ['Group activities', 'Family-style dining', 'Games & entertainment', 'Photo booth', 'Custom menu'],
   },
   {
     id: 'pkg5', title: 'Graduation Party',
-    image: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/photo_5_2026-04-05_21-36-42-m5eOSxoXYxvC7P8RgKM2ynyYrVTkSg.jpg',
+    image: 'https://images.unsplash.com/photo-1523580494863-6f3031224c94?w=800&q=80',
     description: 'Celebrate academic achievements with a memorable graduation party. Honor the graduate with a special ceremony and feast.',
     priceRange: '$200 - $800', guests: '15-75 guests',
     includes: ['Achievement ceremony', 'Buffet dining', 'Decoration', 'DJ services', 'Gift table setup'],
   },
   {
     id: 'pkg6', title: 'Baby Shower',
-    image: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/photo_6_2026-04-05_21-36-42-xJfbJsF34V1lVlBhFwHQyWbPEhfNiq.jpg',
+    image: 'https://images.unsplash.com/photo-1527529482837-4698179dc6ce?w=800&q=80',
     description: 'Welcome your little one with a beautiful baby shower celebration. Gentle, joyful, and filled with blessings for the parents-to-be.',
     priceRange: '$150 - $600', guests: '10-40 guests',
     includes: ['Theme decoration', 'Games & activities', 'Refreshments', 'Gift area', 'Memory book station'],
@@ -126,30 +126,30 @@ const celebrationPackages: CelebrationPackage[] = [
 ];
 
 const meetingHalls: MeetingHall[] = [
-  { id: 'hall1', name: 'Haile Selassie Hall', image: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/photo_6_2026-04-05_22-49-49-xJfbJsF34V1lVlBhFwHQyWbPEhfNiq.jpg', capacity: '200 guests', features: ['WiFi', 'Projector', 'Sound System', 'Stage'], description: 'Our grandest hall, perfect for large conferences and gala events.', pricePerHour: '$150/hour' },
-  { id: 'hall2', name: 'Kwame Nkrumah Hall', image: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/photo_7_2026-04-05_22-49-49-o2hZUexeLafcPjuvwkATt8amcJ4LOp.jpg', capacity: '150 guests', features: ['WiFi', 'Projector', 'Sound System', 'Breakout rooms'], description: 'Ideal for corporate retreats and workshops.', pricePerHour: '$120/hour' },
-  { id: 'hall3', name: 'Jomo Kenyatta Hall', image: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/photo_1_2026-04-05_22-49-49-kK0wmItYngAYsKPXe25v2sDaYMTd0q.jpg', capacity: '100 guests', features: ['WiFi', 'Projector', 'Video conferencing', 'Catering area'], description: 'A versatile space for seminars and training sessions.', pricePerHour: '$100/hour' },
-  { id: 'hall4', name: 'Gamal Abdel Nasser Hall', image: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/photo_2_2026-04-05_22-49-49-HJIM1AjzVUWLLvWW66NbhVtsWcYjui.jpg', capacity: '95 sqm', features: ['WiFi', 'Smart TV', 'Sound System', 'Recording equipment'], description: 'A serene environment for meaningful exchanges.', pricePerHour: '$80/hour' },
-  { id: 'hall5', name: 'Julius Nyerere Hall', image: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/photo_3_2026-04-05_22-49-49-kK0wmItYngAYsKPXe25v2sDaYMTd0q.jpg', capacity: '88 sqm', features: ['WiFi', 'Projector', 'Whiteboard', 'Coffee station'], description: 'An intimate space for contemplation and connection.', pricePerHour: '$60/hour' },
-  { id: 'hall6', name: 'Modibo Keita Hall', image: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/photo_4_2026-04-05_22-49-49-o2hZUexeLafcPjuvwkATt8amcJ4LOp.jpg', capacity: '61 sqm', features: ['WiFi', 'TV Screen', 'Conference phone', 'Natural lighting'], description: 'An elegant space designed for intimate meetings.', pricePerHour: '$50/hour' },
-  { id: 'hall7', name: 'Pan-African Hall', image: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/photo_5_2026-04-05_22-49-49-o2hZUexeLafcPjuvwkATt8amcJ4LOp.jpg', capacity: '300 guests', features: ['WiFi', 'Multiple projectors', 'Stage', 'Translation booths'], description: 'Our largest venue for international conferences.', pricePerHour: '$200/hour' },
+  { id: 'hall1', name: 'Haile Selassie Hall', image: 'https://images.unsplash.com/photo-1517457373958-b7bdd4587205?w=800&q=80', capacity: '200 guests', features: ['WiFi', 'Projector', 'Sound System', 'Stage'], description: 'Our grandest hall, perfect for large conferences and gala events.', pricePerHour: '$150/hour' },
+  { id: 'hall2', name: 'Kwame Nkrumah Hall', image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&q=80', capacity: '150 guests', features: ['WiFi', 'Projector', 'Sound System', 'Breakout rooms'], description: 'Ideal for corporate retreats and workshops.', pricePerHour: '$120/hour' },
+  { id: 'hall3', name: 'Jomo Kenyatta Hall', image: 'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=800&q=80', capacity: '100 guests', features: ['WiFi', 'Projector', 'Video conferencing', 'Catering area'], description: 'A versatile space for seminars and training sessions.', pricePerHour: '$100/hour' },
+  { id: 'hall4', name: 'Gamal Abdel Nasser Hall', image: 'https://images.unsplash.com/photo-1431540015159-0f9673fb2253?w=800&q=80', capacity: '95 sqm', features: ['WiFi', 'Smart TV', 'Sound System', 'Recording equipment'], description: 'A serene environment for meaningful exchanges.', pricePerHour: '$80/hour' },
+  { id: 'hall5', name: 'Julius Nyerere Hall', image: 'https://images.unsplash.com/photo-1462826303086-329426d1aef5?w=800&q=80', capacity: '88 sqm', features: ['WiFi', 'Projector', 'Whiteboard', 'Coffee station'], description: 'An intimate space for contemplation and connection.', pricePerHour: '$60/hour' },
+  { id: 'hall6', name: 'Modibo Keita Hall', image: 'https://images.unsplash.com/photo-1572025442646-866d16c84a54?w=800&q=80', capacity: '61 sqm', features: ['WiFi', 'TV Screen', 'Conference phone', 'Natural lighting'], description: 'An elegant space designed for intimate meetings.', pricePerHour: '$50/hour' },
+  { id: 'hall7', name: 'Pan-African Hall', image: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&q=80', capacity: '300 guests', features: ['WiFi', 'Multiple projectors', 'Stage', 'Translation booths'], description: 'Our largest venue for international conferences.', pricePerHour: '$200/hour' },
 ];
 
 const emamasSuggestions: AISuggestion[] = [
   {
     id: 'sug1', title: 'Your Birthday is Coming Up!', reason: 'April 18th is just around the corner',
     aiInsight: 'Based on your profile, you love intimate gatherings. How about a beautiful birthday brunch with 15-20 close friends?',
-    image: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/photo_1_2026-04-05_22-49-49-o2hZUexeLafcPjuvwkATt8amcJ4LOp.jpg', urgency: 'high', matchScore: 95, linkType: 'package', linkId: 'pkg1',
+    image: 'https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=800&q=80', urgency: 'high', matchScore: 95, linkType: 'package', linkId: 'pkg1',
   },
   {
     id: 'sug2', title: 'Team Offsite Retreat', reason: 'You mentioned work stress during your last visit',
     aiInsight: 'I noticed you lead a team of 12. Our Nyerere Hall would be perfect for a rejuvenating team retreat.',
-    image: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/photo_2_2026-04-05_22-49-49-kK0wmItYngAYsKPXe25v2sDaYMTd0q.jpg', urgency: 'medium', matchScore: 88, linkType: 'hall', linkId: 'hall5',
+    image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&q=80', urgency: 'medium', matchScore: 88, linkType: 'hall', linkId: 'hall5',
   },
   {
-    id: 'sug3', title: 'Family Reunion Getaway', reason: 'Your parents\' anniversary is in May',
-    aiInsight: 'Combine a family reunion with celebrating your parents\' 35th anniversary - we can create a beautiful multi-generational celebration!',
-    image: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/photo_3_2026-04-05_22-49-49-HJIM1AjzVUWLLvWW66NbhVtsWcYjui.jpg', urgency: 'medium', matchScore: 82, linkType: 'package', linkId: 'pkg4',
+    id: 'sug3', title: 'Family Reunion Getaway', reason: "Your parents' anniversary is in May",
+    aiInsight: "Combine a family reunion with celebrating your parents' 35th anniversary - we can create a beautiful multi-generational celebration!",
+    image: 'https://images.unsplash.com/photo-1529543544277-750e2e4b6c68?w=800&q=80', urgency: 'medium', matchScore: 82, linkType: 'package', linkId: 'pkg4',
   },
 ];
 
