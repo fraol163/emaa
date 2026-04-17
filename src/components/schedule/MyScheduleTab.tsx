@@ -35,7 +35,7 @@ interface BookedEvent {
 const defaultActivities: ScheduledActivity[] = [
   {
     id: '1',
-    date: '2026-04-18',
+    date: '2026-04-05',
     time: '10:00 AM',
     title: 'Buna Ceremony',
     location: 'Garden Pavilion',
@@ -51,7 +51,7 @@ const defaultActivities: ScheduledActivity[] = [
   },
   {
     id: '2',
-    date: '2026-04-19',
+    date: '2026-04-05',
     time: '2:00 PM',
     title: 'Traditional Weaving Workshop',
     location: 'Artisan Studio',
@@ -68,7 +68,7 @@ const defaultActivities: ScheduledActivity[] = [
   },
   {
     id: '3',
-    date: '2026-04-20',
+    date: '2026-04-18',
     time: '5:30 PM',
     title: 'Welcome Feast',
     location: 'Main Dining Hall',
