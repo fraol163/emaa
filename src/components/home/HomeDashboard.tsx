@@ -84,6 +84,14 @@ export default function HomeDashboard() {
 
       {/* Main Content */}
       <main className="px-4 md:px-6 py-6 space-y-8 max-w-4xl mx-auto">
+        {/* Ethiopian Tagline */}
+        <div className="text-center">
+          <p className="text-muted-foreground text-sm italic">ምርቱ ላንተ • The Best for You</p>
+        </div>
+
+        {/* Quick Stats */}
+        <QuickStats />
+
         {/* Stay Dates */}
         {stayDates && (
           <div className="bg-white rounded-2xl shadow-warm p-4 md:p-5 border border-border">
@@ -116,14 +124,6 @@ export default function HomeDashboard() {
             </div>
           </div>
         )}
-
-        {/* Ethiopian Tagline */}
-        <div className="text-center">
-          <p className="text-muted-foreground text-sm italic">ምርቱ ላንተ • The Best for You</p>
-        </div>
-
-        {/* Quick Stats */}
-        <QuickStats />
 
         {/* What's Happening Now - Scrollable Events */}
         <ScrollableEvents />
