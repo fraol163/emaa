@@ -28,6 +28,7 @@ interface CulturalExperience {
   duration: string;
   guests: number;
   location: string;
+  price: string;
   aiReason?: string;
 }
 
@@ -44,6 +45,7 @@ const allExperiences: CulturalExperience[] = [
     duration: '1.5 hours',
     guests: 8,
     location: 'Garden Pavilion',
+    price: '$25',
     aiReason: 'You loved warm cultural experiences during your last visit',
   },
   {
@@ -57,6 +59,7 @@ const allExperiences: CulturalExperience[] = [
     duration: '1 hour',
     guests: 12,
     location: 'Cultural Lounge',
+    price: '$20',
     aiReason: 'Perfect for your love of strategy and friendly competition',
   },
   {
@@ -70,6 +73,7 @@ const allExperiences: CulturalExperience[] = [
     duration: '1 hour',
     guests: 20,
     location: 'Dance Hall',
+    price: '$30',
     aiReason: 'Your love for music and movement makes this perfect for you',
   },
   {
@@ -83,6 +87,7 @@ const allExperiences: CulturalExperience[] = [
     duration: '2 hours',
     guests: 15,
     location: 'Family Dining Hall',
+    price: '$35',
     aiReason: 'You mentioned loving family-style dining experiences',
   },
   {
@@ -96,6 +101,7 @@ const allExperiences: CulturalExperience[] = [
     duration: '45 mins',
     guests: 10,
     location: 'Game Room',
+    price: '$15',
     aiReason: 'Your interest in board games and quality time with others',
   },
   {
@@ -109,6 +115,7 @@ const allExperiences: CulturalExperience[] = [
     duration: '2 hours',
     guests: 8,
     location: 'Traditional Kitchen',
+    price: '$30',
     aiReason: 'Your passion for cooking and learning new culinary traditions',
   },
   {
@@ -122,6 +129,7 @@ const allExperiences: CulturalExperience[] = [
     duration: '1.5 hours',
     guests: 25,
     location: 'Firepit Circle',
+    price: '$20',
     aiReason: 'Your love for history, folklore and meaningful conversations',
   },
   {
@@ -135,6 +143,7 @@ const allExperiences: CulturalExperience[] = [
     duration: '2 hours',
     guests: 30,
     location: 'Main Stage',
+    price: '$25',
     aiReason: 'Your appreciation for live performances and cultural arts',
   },
 ];
@@ -324,6 +333,9 @@ export default function LittleEthiopiaTab() {
                       <MapPin className="w-4 h-4" />
                       {emamaRecommendation.location}
                     </span>
+                    <span className="flex items-center gap-1 font-bold text-accent">
+                      {emamaRecommendation.price}
+                    </span>
                   </div>
                   <div className="flex gap-3 pt-2">
                     <button
@@ -387,6 +399,11 @@ export default function LittleEthiopiaTab() {
                     {/* Type Badge */}
                     <span className={`absolute top-3 left-3 px-3 py-1 text-xs font-semibold rounded-full border ${getTypeColor(exp.type)}`}>
                       {exp.type}
+                    </span>
+
+                    {/* Price Badge */}
+                    <span className="absolute bottom-3 right-3 px-3 py-1.5 text-sm font-bold rounded-full bg-white/90 text-foreground shadow-md backdrop-blur-sm">
+                      {exp.price}
                     </span>
 
                     {/* Save Button */}
@@ -519,6 +536,11 @@ export default function LittleEthiopiaTab() {
                       {/* Type Badge */}
                       <span className={`absolute top-3 left-3 px-3 py-1 text-xs font-semibold rounded-full border ${getTypeColor(exp.type)}`}>
                         {exp.type}
+                      </span>
+
+                      {/* Price Badge */}
+                      <span className="absolute bottom-3 right-3 px-3 py-1.5 text-sm font-bold rounded-full bg-white/90 text-foreground shadow-md backdrop-blur-sm">
+                        {exp.price}
                       </span>
 
                       {/* Save Button */}
@@ -756,7 +778,7 @@ export default function LittleEthiopiaTab() {
               </div>
 
               {/* Details Grid */}
-              <div className="grid grid-cols-3 gap-4">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div className="bg-secondary/10 rounded-xl p-4 text-center">
                   <Clock className="w-5 h-5 text-secondary mx-auto mb-2" />
                   <p className="text-xs text-muted-foreground">Duration</p>
@@ -771,6 +793,11 @@ export default function LittleEthiopiaTab() {
                   <MapPin className="w-5 h-5 text-secondary mx-auto mb-2" />
                   <p className="text-xs text-muted-foreground">Location</p>
                   <p className="text-sm font-semibold text-foreground">{selectedExperience.location}</p>
+                </div>
+                <div className="bg-accent/10 rounded-xl p-4 text-center border border-accent/30">
+                  <p className="text-xs text-muted-foreground">Price</p>
+                  <p className="text-xl font-bold text-accent">{selectedExperience.price}</p>
+                  <p className="text-xs text-muted-foreground">per person</p>
                 </div>
               </div>
 

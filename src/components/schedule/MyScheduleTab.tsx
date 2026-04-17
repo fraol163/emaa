@@ -35,7 +35,7 @@ interface BookedEvent {
 const defaultActivities: ScheduledActivity[] = [
   {
     id: '1',
-    date: '2026-04-05',
+    date: '2026-04-18',
     time: '10:00 AM',
     title: 'Buna Ceremony',
     location: 'Garden Pavilion',
@@ -51,7 +51,7 @@ const defaultActivities: ScheduledActivity[] = [
   },
   {
     id: '2',
-    date: '2026-04-05',
+    date: '2026-04-19',
     time: '2:00 PM',
     title: 'Traditional Weaving Workshop',
     location: 'Artisan Studio',
@@ -68,7 +68,7 @@ const defaultActivities: ScheduledActivity[] = [
   },
   {
     id: '3',
-    date: '2026-04-18',
+    date: '2026-04-20',
     time: '5:30 PM',
     title: 'Welcome Feast',
     location: 'Main Dining Hall',
@@ -400,14 +400,14 @@ export default function MyScheduleTab() {
                       </div>
                     </div>
                   </div>
-                  <div className="flex items-end gap-4">
-                    <div>
+                  <div className="flex items-center gap-4">
+                    <div className="flex-1">
                       <div className="text-sm text-muted-foreground mb-1">Time until start</div>
                       <div className="text-5xl font-bold text-accent">{upcoming.minutesUntil}m</div>
                     </div>
                     <Button
                       onClick={() => setShowPreparation(upcoming.activity.id)}
-                      className="flex-1 bg-accent hover:bg-accent/90 text-primary font-bold px-6 py-3 rounded-xl text-lg"
+                      className="bg-accent hover:bg-accent/90 text-primary font-bold px-8 py-4 rounded-xl text-lg whitespace-nowrap"
                     >
                       Help Me Prepare!
                     </Button>
