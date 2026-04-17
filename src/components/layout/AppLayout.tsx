@@ -27,6 +27,8 @@ import {
   LogIn,
   UserPlus,
   BookOpen,
+  MessageSquare,
+  Bell,
 } from 'lucide-react';
 import { mockResort } from '@/src/lib/mockData';
 import EmamaChatWidget from '@/src/components/home/EmamaChatWidget';
@@ -118,6 +120,9 @@ export default function AppLayout({ children }: AppLayoutProps) {
     { href: '/community', label: 'Community', icon: Users },
     { href: '/memory-box', label: 'Memory Box', icon: BookOpen },
     { href: '/profile', label: 'Profile', icon: User },
+    { href: '/feedback', label: 'Guest Feedback', icon: MessageSquare },
+    { href: '/requests', label: 'Requests', icon: Bell },
+    { href: '/staff-management', label: 'Staff Management', icon: Users },
   ];
 
   return (
