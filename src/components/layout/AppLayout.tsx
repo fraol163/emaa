@@ -33,6 +33,7 @@ import EmamaChatWidget from '@/src/components/home/EmamaChatWidget';
 import BackToTopButton from '@/src/components/home/BackToTopButton';
 import LanguageSwitcher from '@/src/components/layout/LanguageSwitcher';
 import PreferencesModal from '@/src/components/auth/PreferencesModal';
+import CheckInCheckOutModal from '@/src/components/auth/CheckInCheckOutModal';
 
 interface AppLayoutProps {
   children: React.ReactNode;
@@ -45,6 +46,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [sidebarExpanded, setSidebarExpanded] = useState(true);
   const [showPrefsModal, setShowPrefsModal] = useState(false);
+  const [showCheckInModal, setShowCheckInModal] = useState(false);
 
   // Check prefs after auth loads (once only)
   useEffect(() => {
@@ -55,7 +57,9 @@ export default function AppLayout({ children }: AppLayoutProps) {
     fetch('/api/preferences')
       .then(r => r.json())
       .then(data => {
-        if (!data.favorite_foods || data.favorite_foods.length === 0) {
+        if (!data.check_in_date) {
+          setShowCheckInModal(true);
+        } else if (!data.favorite_foods || data.favorite_foods.length === 0) {
           setShowPrefsModal(true);
         }
         if (typeof window !== 'undefined') {
@@ -64,6 +68,31 @@ export default function AppLayout({ children }: AppLayoutProps) {
       })
       .catch(() => {});
   }, [isSignedIn, isLoaded, user?.id]);
+
+  const handleCheckInSave = async (checkIn: string, checkOut: string) => {
+    try {
+      // Fetch existing prefs so we don't overwrite them
+      const res = await fetch('/api/preferences');
+      const existing = res.ok ? await res.json() : {};
+
+      await fetch('/api/preferences', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...existing,
+          check_in_date: checkIn,
+          check_out_date: checkOut,
+        }),
+      });
+
+      // Notify dashboard to re-fetch dates
+      window.dispatchEvent(new Event('emama-dates-updated'));
+    } catch {
+      // Save anyway, user can re-enter later
+    }
+    setShowCheckInModal(false);
+    setShowPrefsModal(true);
+  };
 
   useEffect(() => {
     setMounted(true);
@@ -230,6 +259,17 @@ export default function AppLayout({ children }: AppLayoutProps) {
 
       <EmamaChatWidget />
       <BackToTopButton />
+
+      {/* Check-in / Check-out Modal (shown before preferences) */}
+      {showCheckInModal && (
+        <CheckInCheckOutModal
+          onSave={handleCheckInSave}
+          onClose={() => {
+            setShowCheckInModal(false);
+            setShowPrefsModal(true);
+          }}
+        />
+      )}
 
       {/* Preferences Modal */}
       {showPrefsModal && <PreferencesModal onClose={() => setShowPrefsModal(false)} />}

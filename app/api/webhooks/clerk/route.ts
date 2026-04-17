@@ -1,7 +1,7 @@
 import { Webhook } from 'svix';
 import { headers } from 'next/headers';
 import { WebhookEvent } from '@clerk/nextjs/server';
-import { upsertUser } from '@/src/lib/db';
+import { upsertUser, deleteUser } from '@/src/lib/db';
 
 export async function POST(req: Request) {
   const webhookSecret = process.env.CLERK_WEBHOOK_SECRET;
@@ -36,6 +36,13 @@ export async function POST(req: Request) {
       last_name: last_name || '',
       image_url: image_url || '',
     });
+  }
+
+  if (eventType === 'user.deleted') {
+    const { id } = evt.data;
+    if (id) {
+      await deleteUser(id);
+    }
   }
 
   return new Response('Webhook processed', { status: 200 });

@@ -32,6 +32,7 @@ export async function POST(req: Request) {
   try {
     await ensureDb();
     const body = await req.json();
+    console.log('[POST /api/preferences] userId:', userId, 'body keys:', Object.keys(body));
     await savePreferences(userId, body);
     return NextResponse.json({ success: true });
   } catch (err) {

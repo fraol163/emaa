@@ -42,6 +42,8 @@ export async function initDb() {
         favorite_seating TEXT,
         coffee_preference TEXT,
         special_moments TEXT DEFAULT '[]',
+        check_in_date TEXT,
+        check_out_date TEXT,
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
         updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
       )`,
@@ -83,6 +85,22 @@ export async function initDb() {
         updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
       )`,
     ]);
+
+    // Migration: add columns that may not exist in older table versions
+    const migrationStatements = [
+      `ALTER TABLE user_preferences ADD COLUMN check_in_date TEXT`,
+      `ALTER TABLE user_preferences ADD COLUMN check_out_date TEXT`,
+    ];
+    for (const sql of migrationStatements) {
+      try {
+        await database.execute(sql);
+      } catch (e: any) {
+        // SQLite throws "duplicate column name" if column already exists — safe to ignore
+        if (!e?.message?.includes('duplicate column name')) {
+          console.error('[db] migration error:', e.message);
+        }
+      }
+    }
   } catch (err) {
     console.error('[db] initDb error:', err);
   }
@@ -110,6 +128,18 @@ export async function upsertUser(data: {
             updated_at = CURRENT_TIMESTAMP`,
     args: [data.clerk_id, data.username || null, data.email || null, data.first_name || null, data.last_name || null, data.image_url || null],
   });
+}
+
+export async function deleteUser(clerk_id: string) {
+  const database = getDb();
+  await database.batch([
+    { sql: 'DELETE FROM service_requests WHERE clerk_id = ?', args: [clerk_id] },
+    { sql: 'DELETE FROM schedule_progress WHERE clerk_id = ?', args: [clerk_id] },
+    { sql: 'DELETE FROM booked_events WHERE clerk_id = ?', args: [clerk_id] },
+    { sql: 'DELETE FROM family_profiles WHERE clerk_id = ?', args: [clerk_id] },
+    { sql: 'DELETE FROM user_preferences WHERE clerk_id = ?', args: [clerk_id] },
+    { sql: 'DELETE FROM users WHERE clerk_id = ?', args: [clerk_id] },
+  ]);
 }
 
 export async function getUserByClerkId(clerk_id: string) {
@@ -144,15 +174,17 @@ export async function savePreferences(clerk_id: string, prefs: {
   favorite_seating?: string;
   coffee_preference?: string;
   special_moments?: string[];
+  check_in_date?: string;
+  check_out_date?: string;
 }) {
   const database = getDb();
   await database.execute({
     sql: `INSERT INTO user_preferences (
             clerk_id, favorite_foods, activities, hobbies, personality_type,
             travel_context, time_preferences, dietary_notes, favorite_seating,
-            coffee_preference, special_moments
+            coffee_preference, special_moments, check_in_date, check_out_date
           )
-          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
           ON CONFLICT(clerk_id) DO UPDATE SET
             favorite_foods = excluded.favorite_foods,
             activities = excluded.activities,
@@ -164,19 +196,23 @@ export async function savePreferences(clerk_id: string, prefs: {
             favorite_seating = excluded.favorite_seating,
             coffee_preference = excluded.coffee_preference,
             special_moments = excluded.special_moments,
+            check_in_date = excluded.check_in_date,
+            check_out_date = excluded.check_out_date,
             updated_at = CURRENT_TIMESTAMP`,
     args: [
       clerk_id,
-      JSON.stringify(prefs.favorite_foods),
-      JSON.stringify(prefs.activities),
-      JSON.stringify(prefs.hobbies),
-      prefs.personality_type || null,
-      prefs.travel_context || null,
-      JSON.stringify(prefs.time_preferences),
-      prefs.dietary_notes || null,
-      prefs.favorite_seating || null,
-      prefs.coffee_preference || null,
-      JSON.stringify(prefs.special_moments || []),
+      JSON.stringify(Array.isArray(prefs.favorite_foods) ? prefs.favorite_foods : []),
+      JSON.stringify(Array.isArray(prefs.activities) ? prefs.activities : []),
+      JSON.stringify(Array.isArray(prefs.hobbies) ? prefs.hobbies : []),
+      String(prefs.personality_type ?? '') || null,
+      String(prefs.travel_context ?? '') || null,
+      JSON.stringify(Array.isArray(prefs.time_preferences) ? prefs.time_preferences : []),
+      String(prefs.dietary_notes ?? '') || null,
+      String(prefs.favorite_seating ?? '') || null,
+      String(prefs.coffee_preference ?? '') || null,
+      JSON.stringify(Array.isArray(prefs.special_moments) ? prefs.special_moments : []),
+      String(prefs.check_in_date ?? '') || null,
+      String(prefs.check_out_date ?? '') || null,
     ],
   });
 }
@@ -201,6 +237,8 @@ export async function getPreferences(clerk_id: string) {
     favorite_seating: row.favorite_seating as string | null,
     coffee_preference: row.coffee_preference as string | null,
     special_moments: JSON.parse((row.special_moments as string) || '[]') as string[],
+    check_in_date: row.check_in_date as string | null,
+    check_out_date: row.check_out_date as string | null,
   };
 }
 

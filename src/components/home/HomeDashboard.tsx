@@ -1,9 +1,10 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useUser } from '@clerk/nextjs';
+import { Calendar, LogIn, LogOut } from 'lucide-react';
 import { mockProactiveOffers, mockRoomStatus } from '@/src/lib/mockData';
 import QuickStats from './QuickStats';
 import ProactiveCard from './ProactiveCard';
@@ -16,10 +17,49 @@ import MemoryBox from './MemoryBox';
 import EmamaChatWidget from './EmamaChatWidget';
 import BackToTopButton from './BackToTopButton';
 
+function formatDate(dateStr: string): string {
+  const d = new Date(dateStr + 'T00:00:00');
+  return d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
+}
+
+function nightsBetween(checkIn: string, checkOut: string): number {
+  return Math.ceil((new Date(checkOut).getTime() - new Date(checkIn).getTime()) / (1000 * 60 * 60 * 24));
+}
+
 export default function HomeDashboard() {
-  const { user, isLoaded } = useUser();
+  const { user, isLoaded, isSignedIn } = useUser();
   const guestName = isLoaded ? (user?.firstName || user?.username || 'Guest') : 'Guest';
   const [activeOffer, setActiveOffer] = useState<string | null>(null);
+  const [stayDates, setStayDates] = useState<{ check_in_date: string; check_out_date: string } | null>(null);
+
+  // Clear dates when user signs out
+  useEffect(() => {
+    if (isLoaded && !isSignedIn) {
+      setStayDates(null);
+    }
+  }, [isLoaded, isSignedIn]);
+
+  useEffect(() => {
+    if (!isLoaded || !isSignedIn) return;
+
+    const loadDates = () => {
+      fetch('/api/preferences')
+        .then(r => r.json())
+        .then(data => {
+          if (data.check_in_date && data.check_out_date) {
+            setStayDates({ check_in_date: data.check_in_date, check_out_date: data.check_out_date });
+          }
+        })
+        .catch(() => {});
+    };
+
+    loadDates();
+
+    // Re-fetch when dates are saved via CheckInCheckOutModal
+    const onDatesUpdated = () => loadDates();
+    window.addEventListener('emama-dates-updated', onDatesUpdated);
+    return () => window.removeEventListener('emama-dates-updated', onDatesUpdated);
+  }, [isLoaded, isSignedIn]);
 
   return (
     <div className="min-h-screen bg-background">
@@ -44,6 +84,39 @@ export default function HomeDashboard() {
 
       {/* Main Content */}
       <main className="px-4 md:px-6 py-6 space-y-8 max-w-4xl mx-auto">
+        {/* Stay Dates */}
+        {stayDates && (
+          <div className="bg-white rounded-2xl shadow-warm p-4 md:p-5 border border-border">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="flex items-center justify-center w-10 h-10 rounded-full bg-primary/10">
+                  <LogIn className="w-5 h-5 text-primary" />
+                </div>
+                <div>
+                  <p className="text-xs text-muted-foreground">Check-in</p>
+                  <p className="font-semibold text-foreground text-sm">{formatDate(stayDates.check_in_date)}</p>
+                </div>
+              </div>
+              <div className="text-center px-3">
+                <p className="text-xs text-muted-foreground">
+                  {nightsBetween(stayDates.check_in_date, stayDates.check_out_date)} night{nightsBetween(stayDates.check_in_date, stayDates.check_out_date) > 1 ? 's' : ''}
+                </p>
+                <div className="w-16 h-px bg-border my-1" />
+                <Calendar className="w-4 h-4 mx-auto text-muted-foreground" />
+              </div>
+              <div className="flex items-center gap-3">
+                <div className="text-right">
+                  <p className="text-xs text-muted-foreground">Check-out</p>
+                  <p className="font-semibold text-foreground text-sm">{formatDate(stayDates.check_out_date)}</p>
+                </div>
+                <div className="flex items-center justify-center w-10 h-10 rounded-full bg-primary/10">
+                  <LogOut className="w-5 h-5 text-primary" />
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Ethiopian Tagline */}
         <div className="text-center">
           <p className="text-muted-foreground text-sm italic">ምርቱ ላንተ • The Best for You</p>
