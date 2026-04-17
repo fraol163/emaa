@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/button';
 
 interface ScheduledActivity {
   id: string;
+  date: string; // e.g. "2026-04-18"
   time: string;
   title: string;
   location: string;
@@ -34,6 +35,7 @@ interface BookedEvent {
 const defaultActivities: ScheduledActivity[] = [
   {
     id: '1',
+    date: '2026-04-18',
     time: '10:00 AM',
     title: 'Buna Ceremony',
     location: 'Garden Pavilion',
@@ -49,6 +51,7 @@ const defaultActivities: ScheduledActivity[] = [
   },
   {
     id: '2',
+    date: '2026-04-18',
     time: '2:00 PM',
     title: 'Traditional Weaving Workshop',
     location: 'Artisan Studio',
@@ -65,6 +68,7 @@ const defaultActivities: ScheduledActivity[] = [
   },
   {
     id: '3',
+    date: '2026-04-18',
     time: '5:30 PM',
     title: 'Welcome Feast',
     location: 'Main Dining Hall',
@@ -74,6 +78,97 @@ const defaultActivities: ScheduledActivity[] = [
       'Come with appetite!',
       'Traditional eating from shared platter experience',
       'Arrive on time for warm food',
+    ],
+    image: '/dining-hall.jpg',
+    completed: false,
+  },
+  {
+    id: '4',
+    date: '2026-04-19',
+    time: '9:00 AM',
+    title: 'Morning Yoga & Meditation',
+    location: 'Sunrise Terrace',
+    description: 'Start your day with guided Ethiopian-inspired meditation',
+    whatToWear: ['Comfortable workout clothes', 'Barefoot'],
+    preparation: [
+      'Wake up 15 minutes early',
+      'Bring a water bottle',
+      'Set your intentions for the day',
+    ],
+    image: '/comfort-hero.jpg',
+    completed: false,
+  },
+  {
+    id: '5',
+    date: '2026-04-19',
+    time: '1:00 PM',
+    title: 'Injera Making Class',
+    location: 'Kitchen Studio',
+    description: 'Learn to make authentic injera from scratch',
+    whatToWear: ['Casual clothes', 'Apron provided'],
+    preparation: [
+      'Come hungry — you will taste your creation!',
+      'Tie back long hair',
+    ],
+    image: '/gebeta-hero.jpg',
+    completed: false,
+  },
+  {
+    id: '6',
+    date: '2026-04-19',
+    time: '4:00 PM',
+    title: 'Garden Tour & Herbal Workshop',
+    location: 'Herb Garden',
+    description: 'Explore our organic garden and learn about Ethiopian herbs',
+    whatToWear: ['Comfortable walking shoes', 'Sun hat'],
+    preparation: [
+      'Apply sunscreen',
+      'Bring a camera for beautiful shots',
+    ],
+    image: '/buna-ceremony.jpg',
+    completed: false,
+  },
+  {
+    id: '7',
+    date: '2026-04-20',
+    time: '10:00 AM',
+    title: 'Coffee Brewing Masterclass',
+    location: 'Lounge Area',
+    description: 'Advanced Ethiopian coffee preparation techniques',
+    whatToWear: ['Smart casual'],
+    preparation: [
+      'Have a light breakfast',
+      'Bring your curiosity',
+    ],
+    image: '/buna-ceremony.jpg',
+    completed: false,
+  },
+  {
+    id: '8',
+    date: '2026-04-20',
+    time: '2:30 PM',
+    title: 'Cultural Storytelling',
+    location: 'Fireside Lounge',
+    description: 'Listen to traditional Ethiopian stories and legends',
+    whatToWear: ['Comfortable seating attire'],
+    preparation: [
+      'Relax and enjoy',
+      'Feel free to ask questions',
+    ],
+    image: '/culture-hero.jpg',
+    completed: false,
+  },
+  {
+    id: '9',
+    date: '2026-04-20',
+    time: '6:00 PM',
+    title: 'Farewell Dinner & Dance',
+    location: 'Grand Hall',
+    description: 'Celebrate your stay with traditional music, dance, and a feast',
+    whatToWear: ['Semi-formal / traditional dress welcome'],
+    preparation: [
+      'Dress up for the occasion!',
+      'Come ready to dance',
     ],
     image: '/dining-hall.jpg',
     completed: false,
@@ -96,6 +191,7 @@ export default function MyScheduleTab() {
     if (storedEvents.length > 0) {
       const localActivities: ScheduledActivity[] = storedEvents.map((ev: any) => ({
         id: `booked-${ev.id}`,
+        date: ev.date || '2026-04-18',
         time: ev.time,
         title: ev.title,
         location: 'Main Venue',
@@ -215,14 +311,53 @@ export default function MyScheduleTab() {
           </div>
         </div>
 
-        {/* Scheduled Activities Timeline */}
-        <section className="space-y-4">
+        {/* Scheduled Activities Timeline - Grouped by Day */}
+        <section className="space-y-8">
           <h2 className="text-lg font-semibold text-primary">Your Schedule</h2>
 
-          {allActivities.map((activity) => {
-            const isChecked = checkedActivities.has(activity.id);
-            
-            return (
+          {(() => {
+            // Group activities by date
+            const grouped: Record<string, ScheduledActivity[]> = {};
+            allActivities.forEach(a => {
+              if (!grouped[a.date]) grouped[a.date] = [];
+              grouped[a.date].push(a);
+            });
+            // Sort groups by date, tasks by time
+            const sortedDates = Object.keys(grouped).sort();
+            return sortedDates.map(date => {
+              const dayActivities = grouped[date].sort((a, b) => {
+                const parseTime = (t: string) => {
+                  const [time, ampm] = t.split(' ');
+                  let [h, m] = time.split(':').map(Number);
+                  if (ampm === 'PM' && h !== 12) h += 12;
+                  if (ampm === 'AM' && h === 12) h = 0;
+                  return h * 60 + m;
+                };
+                return parseTime(a.time) - parseTime(b.time);
+              });
+              const dateObj = new Date(date + 'T00:00:00');
+              const dayLabel = dateObj.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+
+              return (
+                <div key={date} className="space-y-4">
+                  {/* Date Header */}
+                  <div className="flex items-center gap-4">
+                    <div className="bg-gradient-to-r from-accent to-secondary text-white rounded-xl px-5 py-3 text-center shadow-warm">
+                      <div className="text-2xl font-bold">{dateObj.getDate()}</div>
+                      <div className="text-xs uppercase tracking-wider opacity-90">
+                        {dateObj.toLocaleDateString('en-US', { month: 'short' })}
+                      </div>
+                    </div>
+                    <div>
+                      <h3 className="font-serif text-xl font-bold text-primary">{dayLabel}</h3>
+                      <p className="text-sm text-muted-foreground">{dayActivities.length} {dayActivities.length === 1 ? 'activity' : 'activities'}</p>
+                    </div>
+                  </div>
+
+                  {/* Tasks for this day */}
+                  {dayActivities.map((activity) => {
+                    const isChecked = checkedActivities.has(activity.id);
+                    return (
               <div
                 key={activity.id}
                 className={`glass rounded-2xl overflow-hidden shadow-warm hover:shadow-warm-lg transition-all group ${
@@ -312,8 +447,12 @@ export default function MyScheduleTab() {
                   </div>
                 </div>
               </div>
-            );
-          })}
+                  );
+                  })}
+                </div>
+              );
+            });
+          })()}
         </section>
 
         {/* Upcoming Activity - Dynamic Section */}
@@ -419,6 +558,7 @@ export default function MyScheduleTab() {
                 const newActivities: ScheduledActivity[] = [
                   {
                     id: `ai-${Date.now()}-1`,
+                    date: '2026-04-19',
                     time: '3:00 PM',
                     title: aiData.activity?.name || 'Cultural Experience',
                     location: 'Resort Venue',
@@ -431,6 +571,7 @@ export default function MyScheduleTab() {
                   },
                   {
                     id: `ai-${Date.now()}-2`,
+                    date: '2026-04-20',
                     time: '5:00 PM',
                     title: aiData.meal?.name || 'Sunset Coffee Ceremony',
                     location: 'Garden Pavilion',
