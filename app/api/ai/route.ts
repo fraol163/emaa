@@ -36,7 +36,40 @@ function analyzeWithKeywords(text: string, settings?: AIRequestBody['settings'])
   const lower = text.toLowerCase();
   const currentTemp = settings?.roomTemperature ?? 22;
 
-  // === TEMPERATURE ===
+  // === EXPLICIT TEMPERATURE COMMANDS (e.g. "set temp to 20", "make it 0 degrees", "temperature 24") ===
+  const tempMatch = lower.match(/(?:set|make|change|turn|put|adjust)?\s*(?:the\s+)?(?:temp(?:erature)?|room)\s*(?:to|at|=)?\s*(\d+)\s*(?:degree|°|c)?/i)
+    || lower.match(/(\d+)\s*(?:degree|°)\s*/i);
+  if (tempMatch) {
+    const requestedTemp = Math.max(16, Math.min(28, parseInt(tempMatch[1])));
+    return {
+      mood: requestedTemp < currentTemp ? 'cold' : 'hot',
+      intent: 'change_temperature',
+      confidence: 0.9,
+      message: `Right away, my dear! I've set the room temperature to ${requestedTemp}°C for you.`,
+      actions: [
+        { type: 'set_temperature', value: requestedTemp, label: `Set to ${requestedTemp}°C`, icon: '🌡️' },
+      ],
+    };
+  }
+
+  // === EXPLICIT LIGHTING COMMANDS (e.g. "change light to night", "switch to day mode", "set lighting ambient") ===
+  const lightMatch = lower.match(/(?:set|make|change|switch|turn|put)?\s*(?:the\s+)?(?:light(?:s|ing)?|mode)\s*(?:to|on)?\s*(day|night|ambient)/i)
+    || lower.match(/(day|night|ambient)\s*(?:light(?:s|ing)?|mode)/i);
+  if (lightMatch) {
+    const mode = lightMatch[1].toLowerCase();
+    const modeLabels: Record<string, string> = { day: 'Day', night: 'Night', ambient: 'Ambient' };
+    return {
+      mood: mode === 'night' ? 'tired' : 'relaxed',
+      intent: 'change_lighting',
+      confidence: 0.9,
+      message: `Of course! I've changed the lighting to ${modeLabels[mode]} mode for you.`,
+      actions: [
+        { type: 'set_lighting', value: mode, label: `Set to ${modeLabels[mode]} Lighting`, icon: mode === 'night' ? '🕯️' : mode === 'day' ? '💡' : '🌙' },
+      ],
+    };
+  }
+
+  // === TEMPERATURE (mood-based) ===
   if (/\b(cold|freezing|chilly|warm(?!ed)|frost|shiver)\b/.test(lower)) {
     const newTemp = Math.min(currentTemp + 2, 28);
     return {

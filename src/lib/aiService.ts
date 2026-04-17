@@ -111,7 +111,7 @@ export async function getWeather(): Promise<WeatherData | null> {
   try {
     const { lat, long } = HOTEL_LOCATION;
     const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${long}&current=temperature_2m,weather_code&daily=sunrise,sunset&timezone=auto`;
-    const res = await fetch(url);
+    const res = await fetch(url, { cache: 'no-store' });
     const data = await res.json();
 
     const temp = data.current.temperature_2m;

@@ -48,7 +48,11 @@ export default function ComfortTab() {
   useEffect(() => {
     fetch('/api/weather')
       .then(r => r.json())
-      .then(data => setWeather(data))
+      .then(data => {
+          if (data && typeof data.temp === 'number' && typeof data.condition === 'string') {
+            setWeather(data);
+          }
+        })
       .catch(() => {});
   }, []);
 
@@ -177,7 +181,7 @@ export default function ComfortTab() {
           <div className="bg-gradient-to-r from-blue-50 to-sky-50 border border-blue-100 rounded-2xl p-5 flex items-center gap-4">
             <div className="w-14 h-14 bg-blue-100 rounded-xl flex items-center justify-center">
               <span className="text-2xl">
-                {weather.condition.toLowerCase().includes('rain') ? '🌧' : weather.condition.toLowerCase().includes('cloud') ? '☁' : weather.condition.toLowerCase().includes('clear') ? '☀' : '🌤'}
+                {(weather.condition || '')?.toLowerCase().includes('rain') ? '🌧' : (weather.condition || '')?.toLowerCase().includes('cloud') ? '☁' : (weather.condition || '')?.toLowerCase().includes('clear') ? '☀' : '🌤'}
               </span>
             </div>
             <div className="flex-1">
