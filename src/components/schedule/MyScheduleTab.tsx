@@ -400,14 +400,14 @@ export default function MyScheduleTab() {
                       </div>
                     </div>
                   </div>
-                  <div className="flex items-center gap-4">
-                    <div className="flex-1">
-                      <div className="text-sm text-muted-foreground mb-1">Time until start</div>
-                      <div className="text-5xl font-bold text-accent">{upcoming.minutesUntil}m</div>
+                  <div className="flex items-end gap-6 pt-2">
+                    <div>
+                      <p className="text-xs text-muted-foreground mb-1 uppercase tracking-wide">Time until start</p>
+                      <p className="text-4xl font-bold text-accent leading-none">{upcoming.minutesUntil}m</p>
                     </div>
                     <Button
                       onClick={() => setShowPreparation(upcoming.activity.id)}
-                      className="bg-accent hover:bg-accent/90 text-primary font-bold px-8 py-4 rounded-xl text-lg whitespace-nowrap"
+                      className="flex-1 bg-accent hover:bg-accent/90 text-primary font-bold py-4 rounded-xl text-base h-14"
                     >
                       Help Me Prepare!
                     </Button>
